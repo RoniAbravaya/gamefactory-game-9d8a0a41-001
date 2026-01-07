@@ -1,138 +1,127 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class Batch-20260107-153932-puzzle-01Game extends FlameGame with TapDetector, SwipeDetector {
+import 'game_config.dart';
+import 'analytics_service.dart';
+import 'game_controller.dart';
+
+/// The main FlameGame subclass for the Batch-20260107-153932-puzzle-01 game.
+class Batch20260107153932Puzzle01Game extends FlameGame with TapDetector {
   /// The current game state.
   GameState _gameState = GameState.playing;
 
   /// The current level being played.
   int _currentLevel = 1;
 
-  /// The player's current score.
+  /// The player's score.
   int _score = 0;
 
-  /// The overlay components for the game UI.
-  late final TextComponent _scoreText;
-  late final TextComponent _timerText;
-  late final TextComponent _levelText;
+  /// The player's remaining lives.
+  int _lives = 3;
 
-  /// The countdown timer for the current level.
-  late final Timer _timer;
+  /// The game configuration.
+  late final GameConfig _gameConfig;
 
-  /// The player component.
-  late final PlayerComponent _player;
+  /// The game controller.
+  late final GameController _gameController;
 
-  /// The obstacle components.
-  final List<ObstacleComponent> _obstacles = [];
+  /// The analytics service.
+  late final AnalyticsService _analyticsService;
 
-  /// The collectible components.
-  final List<CollectibleComponent> _collectibles = [];
+  /// Initializes the game.
+  Batch20260107153932Puzzle01Game({
+    required GameConfig gameConfig,
+    required GameController gameController,
+    required AnalyticsService analyticsService,
+  }) {
+    _gameConfig = gameConfig;
+    _gameController = gameController;
+    _analyticsService = analyticsService;
+  }
 
-  /// Initializes the game and sets up the initial state.
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Set up the game overlay
-    _scoreText = TextComponent(text: 'Score: 0', position: Vector2(20, 20));
-    _timerText = TextComponent(text: 'Time: 60', position: Vector2(20, 40));
-    _levelText = TextComponent(text: 'Level: 1', position: Vector2(20, 60));
-    add(_scoreText);
-    add(_timerText);
-    add(_levelText);
+    // Set up the camera and world
+    camera.viewport = FixedResolutionViewport(
+      Vector2(_gameConfig.boardWidth, _gameConfig.boardHeight),
+    );
+    camera.followComponent(_gameController);
 
-    // Set up the player, obstacles, and collectibles
-    _player = PlayerComponent(position: Vector2(100, 100));
-    add(_player);
+    // Load the current level
+    await _loadLevel(_currentLevel);
 
-    for (int i = 0; i < 5; i++) {
-      _obstacles.add(ObstacleComponent(position: Vector2(200 + i * 50, 200)));
-      add(_obstacles[i]);
-    }
-
-    for (int i = 0; i < 3; i++) {
-      _collectibles.add(CollectibleComponent(position: Vector2(300 + i * 75, 300)));
-      add(_collectibles[i]);
-    }
-
-    // Set up the countdown timer
-    _timer = Timer(60, repeat: false, onTick: () {
-      _gameState = GameState.gameOver;
-      // Handle game over logic
-    });
-    add(_timer);
+    // Log the game start event
+    _analyticsService.logGameStart();
   }
 
-  /// Handles the tap input from the player.
-  @override
-  void onTapDown(TapDownInfo info) {
-    super.onTapDown(info);
-    if (_gameState == GameState.playing) {
-      // Handle tile swap logic
-    }
-  }
-
-  /// Handles the swipe input from the player.
-  @override
-  void onSwipeEnd(SwipeInfo info) {
-    super.onSwipeEnd(info);
-    if (_gameState == GameState.playing) {
-      // Handle tile swap logic
-    }
-  }
-
-  /// Updates the game state and components.
   @override
   void update(double dt) {
     super.update(dt);
-    _timer.update(dt);
 
-    // Update the game overlay
-    _scoreText.text = 'Score: $_score';
-    _timerText.text = 'Time: ${_timer.current.toStringAsFixed(2)}';
-    _levelText.text = 'Level: $_currentLevel';
+    // Update the game state
+    switch (_gameState) {
+      case GameState.playing:
+        // Update the game logic
+        _gameController.update(dt);
 
-    // Update the player, obstacles, and collectibles
-    _player.update(dt);
-    for (final obstacle in _obstacles) {
-      obstacle.update(dt);
-    }
-    for (final collectible in _collectibles) {
-      collectible.update(dt);
-    }
+        // Check for level completion
+        if (_gameController.isLevelComplete()) {
+          _gameState = GameState.levelComplete;
+          _analyticsService.logLevelComplete();
+        }
 
-    // Check for level completion or game over
-    if (_timer.isFinished) {
-      _gameState = GameState.gameOver;
-      // Handle game over logic
-    } else if (_isLevelComplete()) {
-      _gameState = GameState.levelComplete;
-      // Handle level complete logic
+        // Check for game over
+        if (_lives <= 0) {
+          _gameState = GameState.gameOver;
+          _analyticsService.logLevelFail();
+        }
+        break;
+      case GameState.paused:
+        // Pause the game logic
+        break;
+      case GameState.gameOver:
+        // Handle game over logic
+        break;
+      case GameState.levelComplete:
+        // Handle level complete logic
+        break;
     }
   }
 
-  /// Checks if the current level is complete.
-  bool _isLevelComplete() {
-    // Implement level completion logic here
-    return false;
+  @override
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+
+    // Handle user input
+    _gameController.onTapDown(info);
   }
 
-  /// Loads the next level.
-  void _loadNextLevel() {
-    // Implement level loading logic here
-    _currentLevel++;
+  /// Loads the specified level.
+  Future<void> _loadLevel(int level) async {
+    // Load the level configuration
+    final levelConfig = _gameConfig.getLevelConfig(level);
+
+    // Create the game components
+    _gameController.loadLevel(levelConfig);
+
+    // Log the level start event
+    _analyticsService.logLevelStart(level);
   }
 
-  /// Resets the game to the initial state.
-  void _resetGame() {
-    // Implement game reset logic here
-    _currentLevel = 1;
-    _score = 0;
-    _gameState = GameState.playing;
-    _timer.start();
+  /// Increments the player's score.
+  void _incrementScore(int points) {
+    _score += points;
+    _gameController.updateScore(_score);
+  }
+
+  /// Decrements the player's lives.
+  void _decrementLives() {
+    _lives--;
+    _gameController.updateLives(_lives);
   }
 }
 
@@ -142,52 +131,4 @@ enum GameState {
   paused,
   gameOver,
   levelComplete,
-}
-
-/// The player component.
-class PlayerComponent extends SpriteComponent {
-  PlayerComponent({required Vector2 position})
-      : super(
-          position: position,
-          size: Vector2.all(50),
-          anchor: Anchor.center,
-        );
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    // Implement player update logic here
-  }
-}
-
-/// The obstacle component.
-class ObstacleComponent extends SpriteComponent {
-  ObstacleComponent({required Vector2 position})
-      : super(
-          position: position,
-          size: Vector2.all(30),
-          anchor: Anchor.center,
-        );
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    // Implement obstacle update logic here
-  }
-}
-
-/// The collectible component.
-class CollectibleComponent extends SpriteComponent {
-  CollectibleComponent({required Vector2 position})
-      : super(
-          position: position,
-          size: Vector2.all(20),
-          anchor: Anchor.center,
-        );
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    // Implement collectible update logic here
-  }
 }

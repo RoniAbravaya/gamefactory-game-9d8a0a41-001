@@ -1,66 +1,66 @@
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
-import 'package:flutter/painting.dart';
+import 'package:flame/collisions.dart';
+import 'package:flutter/material.dart';
 
-/// An obstacle component in the puzzle game.
-/// Represents an obstacle that the player must avoid.
-class Obstacle extends PositionComponent with CollisionCallbacks {
-  /// The speed at which the obstacle moves.
-  final double _speed;
+/// Obstacle component that moves toward the player
+/// 
+/// Scrolls from right to left in endless runner style.
+class Obstacle extends SpriteComponent with HasGameRef, CollisionCallbacks {
+  /// Base move speed - increases with game level
+  double get moveSpeed => 180.0 + (gameRef.currentLevel ?? 1) * 15;
 
-  /// The damage dealt to the player upon collision.
-  final int _damage;
-
-  /// The visual representation of the obstacle.
-  final Sprite _sprite;
-
-  /// Creates a new instance of the Obstacle component.
-  ///
-  /// [position]: The initial position of the obstacle.
-  /// [size]: The size of the obstacle.
-  /// [speed]: The speed at which the obstacle moves.
-  /// [damage]: The damage dealt to the player upon collision.
-  /// [sprite]: The sprite used to represent the obstacle.
   Obstacle({
     required Vector2 position,
     required Vector2 size,
-    required double speed,
-    required int damage,
-    required Sprite sprite,
-  })  : _speed = speed,
-        _damage = damage,
-        _sprite = sprite,
-        super(position: position, size: size);
+  }) : super(
+          position: position,
+          size: size,
+          anchor: Anchor.bottomCenter,
+        );
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addShape(HitboxShape.rectangle(size: size));
+    
+    // Try to load sprite
+    try {
+      sprite = await gameRef.loadSprite('obstacle.png');
+    } catch (e) {
+      // Sprite not available, will use render fallback
+    }
+    
+    // Add collision hitbox - slightly smaller for fair gameplay
+    add(RectangleHitbox(
+      size: Vector2(size.x * 0.8, size.y * 0.9),
+      position: Vector2(size.x * 0.1, size.y * 0.05),
+    ));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    // Move the obstacle based on its speed
-    position.x -= _speed * dt;
-
-    // If the obstacle goes off-screen, reset its position to the right side
-    if (position.x + width < 0) {
-      position.x = game.size.x + width;
+    
+    // Move obstacle toward the left (toward player in endless runner)
+    position.x -= moveSpeed * dt;
+    
+    // Remove if off screen
+    if (position.x < -size.x) {
+      removeFromParent();
     }
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    // Deal damage to the player upon collision
-    other.damage(_damage);
-  }
-
-  @override
   void render(Canvas canvas) {
-    super.render(canvas);
-    // Draw the obstacle's sprite
-    _sprite.render(canvas, position: position, size: size);
+    // If sprite is loaded, use parent render
+    if (sprite != null) {
+      super.render(canvas);
+      return;
+    }
+    
+    // Fallback: draw colored rectangle
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      Paint()..color = Colors.red,
+    );
   }
 }

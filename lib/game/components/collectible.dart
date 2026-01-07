@@ -1,53 +1,126 @@
+import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-/// A collectible item in the puzzle game.
-///
-/// Handles collision detection, score value, optional animation, and sound effect
-/// when the collectible is picked up.
-class Collectible extends SpriteComponent with CollisionCallbacks {
-  final double scoreValue;
-  final AudioPlayer _audioPlayer;
+/// Collectible coin component with floating animation
+/// 
+/// Moves from right to left and bobs up and down.
+class Collectible extends SpriteComponent with HasGameRef, CollisionCallbacks {
+  final int value;
+  
+  /// Base move speed - increases with level
+  double get _moveSpeed => 180.0 + (gameRef.currentLevel ?? 1) * 10;
+  
+  /// Floating animation variables
+  double _floatOffset = 0;
+  final double _floatSpeed = 4.0;
+  final double _floatAmplitude = 8.0;
+  double _baseY = 0;
+  
+  /// Collection state
+  bool _isCollected = false;
 
   Collectible({
     required Vector2 position,
-    required this.scoreValue,
-    required Sprite sprite,
-    required this.size,
-    required AudioPlayer audioPlayer,
-  })  : _audioPlayer = audioPlayer,
-        super(position: position, size: size, sprite: sprite);
+    this.value = 10,
+  }) : super(
+          position: position,
+          size: Vector2(32, 32),
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addEffect(RotateEffect.by(
-      360 * 2,
-      EffectController(
-        duration: 2,
-        infinite: true,
-        curve: Curves.linear,
-      ),
-    ));
-    addEffect(MoveEffect.by(
-      Vector2(0, 10),
-      EffectController(
-        duration: 1,
-        infinite: true,
-        curve: Curves.easeInOut,
-      ),
+    
+    // Try to load sprite
+    try {
+      sprite = await gameRef.loadSprite('coin.png');
+    } catch (e) {
+      // Sprite not available, will use render fallback
+    }
+    
+    // Store base Y position for floating animation
+    _baseY = position.y;
+    
+    // Randomize starting offset for variety
+    _floatOffset = Random().nextDouble() * pi * 2;
+    
+    // Add circular hitbox
+    add(CircleHitbox(
+      radius: size.x / 2 * 0.8,
     ));
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Player) {
-      _audioPlayer.play('collect_sound.mp3');
-      other.score += scoreValue;
+  void update(double dt) {
+    super.update(dt);
+    
+    // Don't update if being collected
+    if (_isCollected) return;
+    
+    // Move collectible toward the left
+    position.x -= _moveSpeed * dt;
+    
+    // Floating animation (bob up and down)
+    _floatOffset += _floatSpeed * dt;
+    position.y = _baseY + sin(_floatOffset) * _floatAmplitude;
+    
+    // Gentle rotation for visual interest
+    angle = sin(_floatOffset * 0.5) * 0.1;
+    
+    // Remove if off screen
+    if (position.x < -size.x) {
       removeFromParent();
     }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    // If sprite is loaded, use parent render
+    if (sprite != null) {
+      super.render(canvas);
+      return;
+    }
+    
+    // Fallback: draw colored circle
+    canvas.drawCircle(
+      Offset(size.x / 2, size.y / 2),
+      size.x / 2,
+      Paint()..color = Colors.amber,
+    );
+  }
+
+  /// Called when player collects this item
+  void collect() {
+    if (_isCollected) return;
+    _isCollected = true;
+    
+    // Disable collision
+    removeAll(children.whereType<ShapeHitbox>());
+    
+    // Collection animation - scale up and fade out
+    add(
+      ScaleEffect.to(
+        Vector2.all(1.5),
+        EffectController(duration: 0.2),
+      ),
+    );
+    add(
+      OpacityEffect.fadeOut(
+        EffectController(duration: 0.2),
+        onComplete: removeFromParent,
+      ),
+    );
+    
+    // Move up slightly
+    add(
+      MoveByEffect(
+        Vector2(0, -30),
+        EffectController(duration: 0.2),
+      ),
+    );
   }
 }
