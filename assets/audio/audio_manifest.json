@@ -1,0 +1,48 @@
+{
+  "game_id": "845ead18-a2b3-415a-8482-7d66c7c10562",
+  "audio_style": "Upbeat, energetic background music with playful sound effects",
+  "required_assets": {
+    "sfx": [
+      {
+        "name": "jump",
+        "description": "Jump sound effect"
+      },
+      {
+        "name": "collect",
+        "description": "Collect item sound"
+      },
+      {
+        "name": "hit",
+        "description": "Player hit sound"
+      },
+      {
+        "name": "success",
+        "description": "Level complete fanfare"
+      },
+      {
+        "name": "fail",
+        "description": "Game over sound"
+      },
+      {
+        "name": "button",
+        "description": "UI button click"
+      }
+    ],
+    "music": [
+      {
+        "name": "menu",
+        "description": "Menu background music"
+      },
+      {
+        "name": "gameplay",
+        "description": "In-game background music"
+      },
+      {
+        "name": "victory",
+        "description": "Victory music"
+      }
+    ]
+  },
+  "format": "mp3",
+  "sample_rate": 44100
+}
