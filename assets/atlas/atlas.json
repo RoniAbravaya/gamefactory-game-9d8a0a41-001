@@ -1,0 +1,191 @@
+{
+  "frames": {
+    "app_icon": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      }
+    },
+    "bg_level1": {
+      "frame": {
+        "x": 514,
+        "y": 0,
+        "w": 1080,
+        "h": 1920
+      },
+      "sourceSize": {
+        "w": 1080,
+        "h": 1920
+      }
+    },
+    "bg_level2": {
+      "frame": {
+        "x": 1596,
+        "y": 0,
+        "w": 1080,
+        "h": 1920
+      },
+      "sourceSize": {
+        "w": 1080,
+        "h": 1920
+      }
+    },
+    "btn_play": {
+      "frame": {
+        "x": 2678,
+        "y": 0,
+        "w": 200,
+        "h": 80
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 80
+      }
+    },
+    "coin": {
+      "frame": {
+        "x": 2880,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      }
+    },
+    "coin_sheet": {
+      "frame": {
+        "x": 2930,
+        "y": 0,
+        "w": 192,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 48
+      }
+    },
+    "enemy_basic": {
+      "frame": {
+        "x": 3124,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "enemy_basic_sheet": {
+      "frame": {
+        "x": 3222,
+        "y": 0,
+        "w": 384,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 384,
+        "h": 96
+      }
+    },
+    "obstacle": {
+      "frame": {
+        "x": 3608,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 64
+      }
+    },
+    "panel_menu": {
+      "frame": {
+        "x": 3674,
+        "y": 0,
+        "w": 400,
+        "h": 300
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 300
+      }
+    },
+    "particle_star": {
+      "frame": {
+        "x": 0,
+        "y": 1922,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 32
+      }
+    },
+    "player": {
+      "frame": {
+        "x": 34,
+        "y": 1922,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      }
+    },
+    "player_sheet": {
+      "frame": {
+        "x": 164,
+        "y": 1922,
+        "w": 512,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 128
+      }
+    },
+    "star": {
+      "frame": {
+        "x": 678,
+        "y": 1922,
+        "w": 48,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 48,
+        "h": 48
+      }
+    },
+    "star_sheet": {
+      "frame": {
+        "x": 728,
+        "y": 1922,
+        "w": 192,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 48
+      }
+    }
+  },
+  "meta": {
+    "size": {
+      "w": 4096,
+      "h": 4096
+    },
+    "format": "RGBA8888"
+  }
+}
