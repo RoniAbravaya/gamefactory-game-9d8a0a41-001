@@ -1,0 +1,18 @@
+# Dart test configuration
+
+platforms:
+  - vm
+  - chrome
+
+timeout: 30s
+
+reporter: expanded
+
+concurrency: 4
+
+include_tags:
+  - unit
+  - integration
+
+exclude_tags:
+  - slow
