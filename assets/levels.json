@@ -1,0 +1,238 @@
+{
+  "levels": [
+    {
+      "level_number": 1,
+      "name": "Tile Tango",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.1,
+      "time_limit_seconds": 60,
+      "target_score": 5000,
+      "obstacles": {
+        "type": "none",
+        "count": 0,
+        "speed": 0
+      },
+      "collectibles": {
+        "type": "coin",
+        "count": 10,
+        "value": 100
+      },
+      "special_features": [],
+      "background_theme": "meadow",
+      "music_track": "happy_tune"
+    },
+    {
+      "level_number": 2,
+      "name": "Gem Galore",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.2,
+      "time_limit_seconds": 60,
+      "target_score": 10000,
+      "obstacles": {
+        "type": "none",
+        "count": 0,
+        "speed": 0
+      },
+      "collectibles": {
+        "type": "gem",
+        "count": 15,
+        "value": 200
+      },
+      "special_features": [],
+      "background_theme": "crystal_cave",
+      "music_track": "mystical_melody"
+    },
+    {
+      "level_number": 3,
+      "name": "Frozen Frenzy",
+      "is_free": true,
+      "unlock_requirement": "none",
+      "difficulty": 0.3,
+      "time_limit_seconds": 60,
+      "target_score": 15000,
+      "obstacles": {
+        "type": "ice_block",
+        "count": 5,
+        "speed": 1
+      },
+      "collectibles": {
+        "type": "snowflake",
+        "count": 20,
+        "value": 150
+      },
+      "special_features": [],
+      "background_theme": "winter_wonderland",
+      "music_track": "icy_ambience"
+    },
+    {
+      "level_number": 4,
+      "name": "Lava Labyrinth",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.4,
+      "time_limit_seconds": 45,
+      "target_score": 20000,
+      "obstacles": {
+        "type": "lava_block",
+        "count": 8,
+        "speed": 2
+      },
+      "collectibles": {
+        "type": "ruby",
+        "count": 12,
+        "value": 300
+      },
+      "special_features": [
+        "lava_blocks_melt_tiles"
+      ],
+      "background_theme": "volcanic_island",
+      "music_track": "intense_adventure"
+    },
+    {
+      "level_number": 5,
+      "name": "Enchanted Enigma",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.5,
+      "time_limit_seconds": 45,
+      "target_score": 25000,
+      "obstacles": {
+        "type": "magic_barrier",
+        "count": 10,
+        "speed": 1
+      },
+      "collectibles": {
+        "type": "enchanted_gem",
+        "count": 15,
+        "value": 400
+      },
+      "special_features": [
+        "magic_barriers_block_swaps"
+      ],
+      "background_theme": "mystical_forest",
+      "music_track": "whimsical_wonder"
+    },
+    {
+      "level_number": 6,
+      "name": "Candy Chaos",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.6,
+      "time_limit_seconds": 45,
+      "target_score": 30000,
+      "obstacles": {
+        "type": "licorice_strand",
+        "count": 12,
+        "speed": 2
+      },
+      "collectibles": {
+        "type": "candy_corn",
+        "count": 18,
+        "value": 250
+      },
+      "special_features": [
+        "licorice_strands_block_matches"
+      ],
+      "background_theme": "candy_land",
+      "music_track": "sugary_sounds"
+    },
+    {
+      "level_number": 7,
+      "name": "Neon Nightmare",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.7,
+      "time_limit_seconds": 30,
+      "target_score": 35000,
+      "obstacles": {
+        "type": "neon_block",
+        "count": 15,
+        "speed": 3
+      },
+      "collectibles": {
+        "type": "neon_shard",
+        "count": 20,
+        "value": 400
+      },
+      "special_features": [
+        "neon_blocks_blind_player"
+      ],
+      "background_theme": "futuristic_city",
+      "music_track": "electronic_pulse"
+    },
+    {
+      "level_number": 8,
+      "name": "Spooky Scramble",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.8,
+      "time_limit_seconds": 30,
+      "target_score": 40000,
+      "obstacles": {
+        "type": "ghost",
+        "count": 12,
+        "speed": 4
+      },
+      "collectibles": {
+        "type": "pumpkin",
+        "count": 22,
+        "value": 350
+      },
+      "special_features": [
+        "ghosts_steal_tiles"
+      ],
+      "background_theme": "haunted_mansion",
+      "music_track": "eerie_ambience"
+    },
+    {
+      "level_number": 9,
+      "name": "Techno Takeover",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 0.9,
+      "time_limit_seconds": 30,
+      "target_score": 45000,
+      "obstacles": {
+        "type": "laser_grid",
+        "count": 18,
+        "speed": 5
+      },
+      "collectibles": {
+        "type": "circuit_board",
+        "count": 25,
+        "value": 500
+      },
+      "special_features": [
+        "laser_grids_destroy_tiles"
+      ],
+      "background_theme": "cyberpunk_city",
+      "music_track": "electronic_symphony"
+    },
+    {
+      "level_number": 10,
+      "name": "Cosmic Chaos",
+      "is_free": false,
+      "unlock_requirement": "rewarded_ad",
+      "difficulty": 1.0,
+      "time_limit_seconds": 30,
+      "target_score": 50000,
+      "obstacles": {
+        "type": "black_hole",
+        "count": 8,
+        "speed": 6
+      },
+      "collectibles": {
+        "type": "stardust",
+        "count": 30,
+        "value": 600
+      },
+      "special_features": [
+        "black_holes_pull_in_tiles"
+      ],
+      "background_theme": "deep_space",
+      "music_track": "galactic_grandeur"
+    }
+  ]
+}
